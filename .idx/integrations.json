@@ -1,3 +1,6 @@
 {
+  "firebase_hosting": {
+    "deploymentHostingUrl": "https://hp-task-management.web.app"
+  },
   "gemini_api": {}
 }

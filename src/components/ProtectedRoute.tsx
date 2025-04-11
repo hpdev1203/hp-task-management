@@ -12,7 +12,7 @@ const ProtectedRoute: React.FC = () => {
 
   // If user is authenticated, render the child route (using Outlet)
   // Otherwise, redirect to the login page
-  return currentUser ? <Outlet /> : <Navigate to="/auth" replace />;
+  return currentUser ? <Outlet /> : <Navigate to="/login" replace />;
 };
 
 export default ProtectedRoute;
