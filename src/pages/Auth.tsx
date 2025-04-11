@@ -22,6 +22,7 @@ const Auth: React.FC = () => {
             const user = result.user;
             console.log('User signed in with Google successfully:', user);
             navigate('/'); // Redirect to dashboard after sign in
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         } catch (error: any) {
             console.error('Error signing in with Google:', error);
             // Handle specific errors
