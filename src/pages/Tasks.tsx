@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import TaskCard from '../components/TaskCard';
+import { taskService } from '../services/taskService';
 
 interface Task {
   id: string;
@@ -10,6 +11,7 @@ interface Task {
   dueDate: string;
   projectId: string;
   assignedTo: string;
+  createdAt: string;
 }
 
 interface FormData {
@@ -34,30 +36,11 @@ const Tasks: React.FC = () => {
 
   useEffect(() => {
     // TODO: Fetch tasks from Firebase
-    // For now, using mock data
-    const mockTasks: Task[] = [
-      {
-        id: '1',
-        title: 'Design Homepage',
-        description: 'Create new homepage design with modern look',
-        status: 'in-progress',
-        priority: 'high',
-        dueDate: '2023-12-31',
-        projectId: '1',
-        assignedTo: 'John Doe',
-      },
-      {
-        id: '2',
-        title: 'Implement Authentication',
-        description: 'Add user authentication using Firebase',
-        status: 'todo',
-        priority: 'high',
-        dueDate: '2023-12-15',
-        projectId: '1',
-        assignedTo: 'Jane Smith',
-      },
-    ];
-    setTasks(mockTasks);
+    const fetchTasks = async () => {
+      const tasks = await taskService.getAllTasks();
+      setTasks(tasks);
+    };
+    fetchTasks();
   }, []);
 
   const handleOpen = () => {
@@ -114,6 +97,7 @@ const Tasks: React.FC = () => {
         assignedTo: formData.assignee,
         dueDate: '2023-12-31',
         projectId: '1',
+        createdAt: new Date().toISOString(),
       };
       setTasks([...tasks, newTask]);
     }
@@ -122,6 +106,15 @@ const Tasks: React.FC = () => {
 
   const getTasksByStatus = (status: Task['status']) => {
     return tasks.filter((task) => task.status === status);
+  };
+
+  const handleStatusChange = (taskId: string, newStatus: string) => {
+    // TODO: Update task status in Firebase
+    setTasks(
+      tasks.map((task) =>
+        task.id === taskId ? { ...task, status: newStatus as Task['status'] } : task
+      )
+    );
   };
 
   return (
@@ -227,11 +220,13 @@ const Tasks: React.FC = () => {
               {getTasksByStatus('todo').map((task) => (
                 <TaskCard
                   key={task.id}
-                  {...task}
+                  task={task}
+                  onStatusChange={handleStatusChange}
+                  onDelete={handleDelete}
                   category="To Do"
                   dueDate={task.dueDate}
-                  priority={task.priority}
-                  status={task.status}
+                  projectId={task.projectId}
+                  assignedTo={task.assignedTo}
                 />
               ))}
             </div>
@@ -247,11 +242,13 @@ const Tasks: React.FC = () => {
               {getTasksByStatus('in-progress').map((task) => (
                 <TaskCard
                   key={task.id}
-                  {...task}
+                  task={task}
+                  onStatusChange={handleStatusChange}
+                  onDelete={handleDelete}
                   category="In Progress"
                   dueDate={task.dueDate}
-                  priority={task.priority}
-                  status={task.status}
+                  projectId={task.projectId}
+                  assignedTo={task.assignedTo}
                 />
               ))}
             </div>
@@ -267,11 +264,13 @@ const Tasks: React.FC = () => {
               {getTasksByStatus('completed').map((task) => (
                 <TaskCard
                   key={task.id}
-                  {...task}
+                  task={task}
+                  onStatusChange={handleStatusChange}
+                  onDelete={handleDelete}
                   category="Completed"
                   dueDate={task.dueDate}
-                  priority={task.priority}
-                  status={task.status}
+                  projectId={task.projectId}
+                  assignedTo={task.assignedTo}
                 />
               ))}
             </div>

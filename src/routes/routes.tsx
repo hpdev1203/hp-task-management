@@ -1,9 +1,9 @@
 import { Routes, Route } from 'react-router-dom';
-import Layout from './components/Layout';
-import Dashboard from './pages/Dashboard';
-import Tasks from './pages/Tasks';
-import Projects from './pages/Projects';
-import Users from './pages/Users';
+import Layout from '../components/Layout';
+import Dashboard from '../pages/Dashboard';
+import Tasks from '../pages/Tasks';
+import Projects from '../pages/Projects';
+import Users from '../pages/Users';
 
 const AppRoutes = () => {
   return (
